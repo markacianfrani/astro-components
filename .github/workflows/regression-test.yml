@@ -1,0 +1,40 @@
+name: Check for regressions
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types: [ labeled, synchronize, reopened ]
+    branches: [ master ]
+
+jobs:
+  regression-test:
+    runs-on: ubuntu-latest
+    steps:
+    # - name: Checkout repo at master
+    #   uses: actions/checkout@v2
+    #   with:
+    #     ref: master
+    
+    # - name: Install dependencies
+    #   run: npm install
+
+    # - name: Generate Screenshots for reference
+      # run: ./scripts/regression.sh reference
+
+    - name: Checkout repo at ${{ github.base_ref }}
+      uses: actions/checkout@v2
+      with:
+        clean: false # Without this the test results would be cleared
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run regression test
+      run: ./scripts/regression.sh test
+
+    - name: Upload regression test results as an artifact
+      if: always() # If the test fails we will often still have a report
+      uses: actions/upload-artifact@v2
+      with:
+        name: regression-test-results
+        path: backstop_data
