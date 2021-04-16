@@ -9,7 +9,7 @@ const properties = require('postcss-custom-properties');
 const sass = require('gulp-sass');
 
 
-sass.compiler = require('node-sass');
+sass.compiler = require('dart-sass');
 const packageDist = './src/modules/rux-core/dist';
 
 gulp.task('rux-core-static', () => {

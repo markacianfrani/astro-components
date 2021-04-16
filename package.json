@@ -20,10 +20,15 @@
   "private": false,
   "scripts": {
     "build-storybook": "lerna bootstrap && gulp build && build-storybook -c .storybook -s ./static",
-    "storybook": "lerna bootstrap && gulp build && start-storybook -p 9001 -c .storybook -s ./static "
+    "storybook": "lerna bootstrap && gulp build && start-storybook -p 9001 -c .storybook -s ./static ",
+    "build-sb-and-serve": "npm run build-storybook && http-server -p 8085 ./storybook-static",
+    "visual-regression-test:mac": "build-sb-and-serve http://localhost:8085 && docker:mac:test",
+    "docker:mac:test": "docker run -e IS_MAC=true --network=\"host\" --rm -v $(pwd):/src backstopjs/backstopjs test --configPath=backstop.config.js; backstop openReport --configPath=backstop.config.js"
   },
   "dependencies": {
     "ag-grid-community": "^24.0.0",
+    "dart-sass": "^1.25.0",
+    "http-server": "^0.12.3",
     "lit-element": "^2.3.1",
     "lit-html": "^1.2.1",
     "military-timezones": "^1.0.0",
@@ -65,7 +70,6 @@
     "husky": "^2.3.0",
     "lerna": "^3.16.4",
     "lint-staged": "^8.1.6",
-    "node-sass": "^5.0.0",
     "postcss-color-mod-function": "^3.0.3",
     "postcss-custom-properties": "^8.0.10",
     "prettier": "^1.19.1",
